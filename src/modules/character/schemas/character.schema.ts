@@ -1,10 +1,18 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Document } from 'mongoose';
+import { HydratedDocument, Types } from 'mongoose';
 
-export type CharacterDocument = Character & Document;
+export type CharacterDocument = HydratedDocument<Character>;
 
-@Schema({ timestamps: true })
+@Schema({ 
+  timestamps: true,
+  collection: 'characters'
+})
 export class Character {
+  _id: Types.ObjectId;
+
+  @Prop({ required: false, type: String })
+  userId: string;
+
   @Prop({ required: true })
   name: string;
 
@@ -12,15 +20,15 @@ export class Character {
   level: number;
 
   @Prop({
+    required: false,
     type: {
-      strength: { type: Number, required: true },
-      dexterity: { type: Number, required: true },
-      constitution: { type: Number, required: true },
-      intelligence: { type: Number, required: true },
-      wisdom: { type: Number, required: true },
-      charisma: { type: Number, required: true },
+      strength: { type: Number, default: 10 , min: 1, max: 30},
+      dexterity: { type: Number, default: 10 , min: 1, max: 30},
+      constitution: { type: Number, default: 10 , min: 1, max: 30},
+      intelligence: { type: Number, default: 10 , min: 1, max: 30},
+      wisdom: { type: Number, default: 10 , min: 1, max: 30},
+      charisma: { type: Number, default: 10 , min: 1, max: 30},
     },
-    required: true,
   })
   stats: {
     strength: number;

@@ -1,4 +1,5 @@
-import { IsString, IsOptional, IsNumber, Min, Max } from 'class-validator';
+import { CharacterStats } from '@/types/character';
+import { IsNumber, IsOptional, IsString, Max, Min, ValidateNested } from 'class-validator';
 
 export class CreateCharacterDto {
   @IsString()
@@ -13,5 +14,8 @@ export class CreateCharacterDto {
   @Min(1)
   @Max(20)
   level?: number;
+
+  @ValidateNested()
+  stats!: CharacterStats;
 }
 
