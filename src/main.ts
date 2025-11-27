@@ -21,7 +21,6 @@ async function bootstrap() {
     prefix: 'v',
   });
 
-  // Configuration Swagger
   const config = new DocumentBuilder()
     .setTitle('Rolistica API')
     .setDescription('A dynamic RPG character creator and manager API')
@@ -32,10 +31,9 @@ async function bootstrap() {
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, document);
 
-  // Configuration CORS
   app.enableCors({
     origin: '*',
-    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
+    methods: 'GET,,PUT,POST,DELETE',
     credentials: true,
   });
 
