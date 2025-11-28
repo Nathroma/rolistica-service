@@ -2,7 +2,7 @@ import { CreateCharacterDto, UpdateCharacterDto } from '@/modules/character/dto'
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { Character, CharacterDocument } from './schemas/character.schema';
+import { Character, CharacterDocument } from './entities/character.entity';
 
 @Injectable()
 export class CharacterService {
@@ -13,9 +13,9 @@ export class CharacterService {
   async getCharacter(id: string): Promise<Character> {
     const character = await this.characterModel.findById(id);
     if (!character) {
-      throw new NotFoundException('Character not found');
+      throw new NotFoundException("Character not found, Verify the ID");
     }
-    return character as Character;
+    return character;
   }
 
   async createCharacter(createCharacterDto: CreateCharacterDto): Promise<Character> {
@@ -26,15 +26,15 @@ export class CharacterService {
   async updateCharacter(id: string, updateCharacterDto: UpdateCharacterDto): Promise<Character> {
     const character = await this.characterModel.findByIdAndUpdate(id, updateCharacterDto, { new: true });
     if (!character) {
-      throw new NotFoundException('Character not found');
+      throw new NotFoundException();
     }
-    return character as Character;
+    return character;
   }
 
   async deleteCharacter(id: string): Promise<void> {
     const character = await this.characterModel.findById(id);
     if (!character) {
-      throw new NotFoundException('Character not found');
+      throw new NotFoundException();
     }
     await character.deleteOne();
   }

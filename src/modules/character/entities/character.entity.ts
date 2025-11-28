@@ -1,24 +1,29 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { HydratedDocument, Types } from 'mongoose';
+import { Exclude, Expose } from 'class-transformer';
+import { HydratedDocument } from 'mongoose';
 
 export type CharacterDocument = HydratedDocument<Character>;
-
+@Exclude()
 @Schema({ 
   timestamps: true,
   collection: 'characters'
 })
 export class Character {
-  _id: Types.ObjectId;
-
   @Prop({ required: false, type: String })
   userId: string;
 
+  @Prop({ required: false, type: String })
+  collectionName: string;
+
+  @Expose()
   @Prop({ required: true })
   name: string;
 
+  @Expose()
   @Prop({ default: 1, min: 1, max: 20 })
   level: number;
 
+  @Expose()
   @Prop({
     required: false,
     type: {
@@ -39,6 +44,7 @@ export class Character {
     charisma: number;
   };
 
+  @Expose()
   @Prop({ default: 'D&D 5e' })
   gameSystem: string;
 }

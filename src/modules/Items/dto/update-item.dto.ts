@@ -3,7 +3,7 @@ import { ApiPropertyOptional } from "@nestjs/swagger";
 import { IsEnum, IsNumber, IsOptional, IsString } from "class-validator";
 
 @Injectable()
-export class CreateItemDto {
+export class UpdateItemDto {
   @ApiPropertyOptional({ description: 'Nom de l\'item', example: 'Épée' })
   @IsOptional()
   @IsString()

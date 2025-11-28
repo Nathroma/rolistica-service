@@ -5,12 +5,12 @@ import { Types } from 'mongoose';
 export class IdValidationPipe implements PipeTransform<string, Types.ObjectId> {
     transform(id: string): Types.ObjectId {
         if (!id) {
-            throw new BadRequestException('ID is required');
+            throw new BadRequestException();
         }
 
         const validObjectId = Types.ObjectId.isValid(id);
         if (!validObjectId) {
-            throw new BadRequestException('Invalid ID');
+            throw new BadRequestException();
         }
 
         return Types.ObjectId.createFromHexString(id);
