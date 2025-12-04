@@ -1,8 +1,7 @@
 import { UpdateCharacterDto } from '@/modules/character/dto/update-character.dto';
 import { Character } from '@/modules/character/entities/character.entity';
-import { mongoIdSchema } from '@/modules/character/schemas/mongo-id.schema';
 import { updateCharacterSchema } from '@/modules/character/schemas/update-character.schema';
-import { IdValidationPipe } from '@/pipes/validation.pipe';
+import { mongoIdSchema } from '@/modules/schemas/mongo-id.schema';
 import { ZodValidationPipe } from '@/pipes/zod-validation.pipe';
 import { Body, Controller, Delete, Get, Param, Post, Put, UsePipes, Version } from '@nestjs/common';
 import { CharacterService } from './character.service';
@@ -14,7 +13,7 @@ export class CharacterController {
   constructor(private readonly characterService: CharacterService) {}
 
   @Version('1')
-  @Get('/:id')
+  @Get(':id')
   @UsePipes(new ZodValidationPipe(mongoIdSchema))
   async getCharacter(@Param('id') id: string): Promise<Character> {
     return this.characterService.getCharacter(id);
@@ -30,7 +29,7 @@ export class CharacterController {
   @Version('1')
   @Put(':id')
   @UsePipes(new ZodValidationPipe(updateCharacterSchema))
-  async updateCharacter(@Param('id', IdValidationPipe) id: string, @Body() updateCharacterDto: UpdateCharacterDto): Promise<Character> {
+  async updateCharacter(@Param('id') id: string, @Body() updateCharacterDto: UpdateCharacterDto): Promise<Character> {
     return this.characterService.updateCharacter(id, updateCharacterDto);
   }
 

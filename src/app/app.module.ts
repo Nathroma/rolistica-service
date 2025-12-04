@@ -1,3 +1,4 @@
+import { ItemModule } from '@/modules/Items/item.module';
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 import { CharacterModule } from '../modules/character/character.module';
@@ -10,6 +11,7 @@ import { AppService } from './app.service';
       process.env.MONGO_DB_ENDPOINT || 'mongodb://localhost:27017/rolistica',
     ),
     CharacterModule,
+    ItemModule,
   ],
   controllers: [AppController],
   providers: [AppService],

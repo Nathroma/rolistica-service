@@ -37,7 +37,7 @@ async function bootstrap() {
     credentials: true,
   });
 
-  const port = parseInt(process.env.APP_API_PORT || '3000');
+  const port = parseInt(process.env.APP_API_PORT || '4000');
   const host = process.env.APP_HOSTNAME || 'localhost';
   await app.listen(port, host);
 

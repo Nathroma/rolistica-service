@@ -10,7 +10,7 @@ export interface CharacterStats {
 }
 
 export interface Character {
-  id: string;
+  _id: string;
   name: string;
   level: number;
   stats: CharacterStats;
@@ -23,6 +23,9 @@ export interface CreateCharacterRequest {
   name: string;
   gameSystem?: string;
   level?: number;
+  stats: CharacterStats;
+  userId: string;
+  collectionName: string;
 }
 
 export interface UpdateCharacterRequest {
@@ -30,20 +33,6 @@ export interface UpdateCharacterRequest {
   level?: number;
   stats?: Partial<CharacterStats>;
   gameSystem?: string;
+  userId?: string;
+  collectionName?: string;
 }
-
-export interface ApiResponse<T = any> {
-  success: boolean;
-  data?: T;
-  message?: string;
-  error?: string;
-}
-
-export interface PaginatedResponse<T> extends ApiResponse<T[]> {
-  pagination: {
-    page: number;
-    limit: number;
-    total: number;
-    totalPages: number;
-  };
-} 
