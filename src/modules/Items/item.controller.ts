@@ -1,12 +1,9 @@
-import { UpdateItemDto } from '@/modules/Items/dto/update-item.dto';
-import { createItemSchema } from '@/modules/Items/schemas/create-item.schema';
-import { updateItemSchema } from '@/modules/Items/schemas/update-item.schema';
+import { UpdateItemDto } from '@/modules/Items/dto/request/update-item.dto';
 import { MongoIdParamDto } from '@/modules/schemas/mongo-id-param.schema';
-import { ZodSchemaPipe } from '@/pipes/zod-schema.pipe';
-import { Body, Controller, Delete, Get, Param, Post, Put, UsePipes, Version } from '@nestjs/common';
-import { CreateItemDto } from './dto/create-item.dto';
-import { Item } from './entities/item.entity';
+import { Body, Controller, Delete, Get, Param, Post, Put, Version } from '@nestjs/common';
+import { CreateItemDto } from './dto/request/create-item.dto';
 import { ItemService } from './item.service';
+import { Item } from './models/item.model';
 
 @Controller('items')
 export class ItemController {
@@ -20,14 +17,12 @@ export class ItemController {
 
     @Version('1')
     @Post()
-    @UsePipes(new ZodSchemaPipe(createItemSchema))
     async createItem(@Body() createItemDto: CreateItemDto): Promise<Item> {
         return this.itemService.createItem(createItemDto);
     }
 
     @Version('1')
     @Put(':id')
-    @UsePipes(new ZodSchemaPipe(updateItemSchema))
     async updateItem(@Param() params: MongoIdParamDto, @Body() updateItemDto: UpdateItemDto): Promise<Item> {
         return this.itemService.updateItem(params.id, updateItemDto);
     }
