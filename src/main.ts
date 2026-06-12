@@ -1,19 +1,11 @@
-import { VERSION_NEUTRAL, ValidationPipe, VersioningType } from '@nestjs/common';
+import { VERSION_NEUTRAL, VersioningType } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import { cleanupOpenApiDoc } from 'nestjs-zod';
 import { AppModule } from './app/app.module';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-
-  // Active la validation globale des DTOs
-  app.useGlobalPipes(
-    new ValidationPipe({
-      whitelist: true,
-      forbidNonWhitelisted: true,
-      transform: true,
-    }),
-  );
 
   app.enableVersioning({
     type: VersioningType.URI,
@@ -25,10 +17,11 @@ async function bootstrap() {
     .setTitle('Rolistica API')
     .setDescription('A dynamic RPG character creator and manager API')
     .setVersion('1.0')
-    .addTag('characters')
+    .addTag('characters', 'Gestion des personnages')
+    .addTag('items', 'Gestion des objets')
     .build();
-  
-  const document = SwaggerModule.createDocument(app, config);
+
+  const document = cleanupOpenApiDoc(SwaggerModule.createDocument(app, config));
   SwaggerModule.setup('api', app, document);
 
   app.enableCors({
@@ -46,4 +39,3 @@ async function bootstrap() {
 }
 
 bootstrap();
-

@@ -1,42 +1,56 @@
-import { UpdateCharacterDto } from '@/modules/character/dto/update-character.dto';
-import { Character } from '@/modules/character/entities/character.entity';
-import { updateCharacterSchema } from '@/modules/character/schemas/update-character.schema';
-import { mongoIdSchema } from '@/modules/schemas/mongo-id.schema';
-import { ZodValidationPipe } from '@/pipes/zod-validation.pipe';
-import { Body, Controller, Delete, Get, Param, Post, Put, UsePipes, Version } from '@nestjs/common';
+import { CharacterResponseDto, CreateCharacterDto, UpdateCharacterDto } from '@/modules/character/schemas';
+import { MongoIdParamDto } from '@/modules/schemas/mongo-id-param.schema';
+import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Post, Put, Version } from '@nestjs/common';
+import { ApiCreatedResponse, ApiNoContentResponse, ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { CharacterService } from './character.service';
-import { CreateCharacterDto } from './dto/create-character.dto';
-import { createCharacterSchema } from './schemas/create-character.schema';
 
+@ApiTags('characters')
 @Controller('/characters')
 export class CharacterController {
-  constructor(private readonly characterService: CharacterService) {}
+    constructor(private readonly characterService: CharacterService) {}
 
-  @Version('1')
-  @Get(':id')
-  @UsePipes(new ZodValidationPipe(mongoIdSchema))
-  async getCharacter(@Param('id') id: string): Promise<Character> {
-    return this.characterService.getCharacter(id);
-  }
+    @Version('1')
+    @Get(':id')
+    @ApiOperation({
+        summary: 'Récupérer un personnage',
+        description: 'Retourne un personnage par son identifiant MongoDB.',
+    })
+    @ApiOkResponse({ type: CharacterResponseDto.Output })
+    async getCharacter(@Param() params: MongoIdParamDto) {
+        return this.characterService.getCharacter(params.id);
+    }
 
-  @Version('1')
-  @Post()
-  @UsePipes(new ZodValidationPipe(createCharacterSchema))
-  async createCharacter(@Body() createCharacterDto: CreateCharacterDto): Promise<Character> {
-    return this.characterService.createCharacter(createCharacterDto);
-  }
+    @Version('1')
+    @Post()
+    @ApiOperation({
+        summary: 'Créer un personnage',
+        description: 'Crée un nouveau personnage avec ses statistiques de base.',
+    })
+    @ApiCreatedResponse({ type: CharacterResponseDto.Output })
+    async createCharacter(@Body() createCharacterDto: CreateCharacterDto) {
+        return this.characterService.createCharacter(createCharacterDto);
+    }
 
-  @Version('1')
-  @Put(':id')
-  @UsePipes(new ZodValidationPipe(updateCharacterSchema))
-  async updateCharacter(@Param('id') id: string, @Body() updateCharacterDto: UpdateCharacterDto): Promise<Character> {
-    return this.characterService.updateCharacter(id, updateCharacterDto);
-  }
+    @Version('1')
+    @Put(':id')
+    @ApiOperation({
+        summary: 'Mettre à jour un personnage',
+        description: 'Met à jour partiellement un personnage existant.',
+    })
+    @ApiOkResponse({ type: CharacterResponseDto.Output })
+    async updateCharacter(@Param() params: MongoIdParamDto, @Body() updateCharacterDto: UpdateCharacterDto) {
+        return this.characterService.updateCharacter(params.id, updateCharacterDto);
+    }
 
-  @Version('1')
-  @Delete(':id')
-  @UsePipes(new ZodValidationPipe(mongoIdSchema))
-  async deleteCharacter(@Param('id') id: string): Promise<void> {
-    return this.characterService.deleteCharacter(id);
-  }
+    @Version('1')
+    @Delete(':id')
+    @HttpCode(HttpStatus.NO_CONTENT)
+    @ApiOperation({
+        summary: 'Supprimer un personnage',
+        description: 'Supprime définitivement un personnage.',
+    })
+    @ApiNoContentResponse({ description: 'Personnage supprimé avec succès' })
+    async deleteCharacter(@Param() params: MongoIdParamDto): Promise<void> {
+        return this.characterService.deleteCharacter(params.id);
+    }
 }
