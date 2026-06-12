@@ -3,10 +3,11 @@ import { Exclude, Expose } from 'class-transformer';
 import { HydratedDocument } from 'mongoose';
 
 export type CharacterDocument = HydratedDocument<Character>;
+
 @Exclude()
-@Schema({ 
+@Schema({
   timestamps: true,
-  collection: 'characters'
+  collection: 'characters',
 })
 export class Character {
   @Prop({ required: false, type: String })
@@ -27,12 +28,12 @@ export class Character {
   @Prop({
     required: false,
     type: {
-      strength: { type: Number, default: 10 , min: 1, max: 30},
-      dexterity: { type: Number, default: 10 , min: 1, max: 30},
-      constitution: { type: Number, default: 10 , min: 1, max: 30},
-      intelligence: { type: Number, default: 10 , min: 1, max: 30},
-      wisdom: { type: Number, default: 10 , min: 1, max: 30},
-      charisma: { type: Number, default: 10 , min: 1, max: 30},
+      strength: { type: Number, default: 10, min: 1, max: 30 },
+      dexterity: { type: Number, default: 10, min: 1, max: 30 },
+      constitution: { type: Number, default: 10, min: 1, max: 30 },
+      intelligence: { type: Number, default: 10, min: 1, max: 30 },
+      wisdom: { type: Number, default: 10, min: 1, max: 30 },
+      charisma: { type: Number, default: 10, min: 1, max: 30 },
     },
   })
   stats: {
@@ -50,4 +51,3 @@ export class Character {
 }
 
 export const CharacterSchema = SchemaFactory.createForClass(Character);
-
