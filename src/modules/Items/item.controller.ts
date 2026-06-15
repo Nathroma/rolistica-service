@@ -1,7 +1,7 @@
-import { UpdateItemDto } from '@/modules/Items/dto/request/update-item.dto';
+import { UpdateItemDto } from '@/modules/Items/dtos/request/update-item.dto';
 import { MongoIdParamDto } from '@/modules/schemas/mongo-id-param.schema';
 import { Body, Controller, Delete, Get, Param, Post, Put, Version } from '@nestjs/common';
-import { CreateItemDto } from './dto/request/create-item.dto';
+import { CreateItemDto } from './dtos/request/create-item.dto';
 import { ItemService } from './item.service';
 import { Item } from './models/item.model';
 

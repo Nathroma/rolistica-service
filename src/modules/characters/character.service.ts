@@ -1,6 +1,6 @@
-import { CreateCharacterDto } from '@/modules/character/dtos/request/create-character.dto';
-import { UpdateCharacterDto } from '@/modules/character/dtos/request/update-character.dto';
-import { Character, CharacterDocument } from '@/modules/character/models/character.model';
+import { CreateCharacterDto } from '@/modules/characters/dtos/request/create-character.dto';
+import { UpdateCharacterDto } from '@/modules/characters/dtos/request/update-character.dto';
+import { Character, CharacterDocument } from '@/modules/characters/models/character.model';
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';

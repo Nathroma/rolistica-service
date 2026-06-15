@@ -46,7 +46,7 @@ export class Character {
   };
 
   @Expose()
-  @Prop({ default: 'D&D 5e' })
+  @Prop({ default: '' })
   gameSystem: string;
 }
 

@@ -1,5 +1,5 @@
-import { CreateItemDto } from '@/modules/Items/dto/request/create-item.dto';
-import { UpdateItemDto } from '@/modules/Items/dto/request/update-item.dto';
+import { CreateItemDto } from '@/modules/Items/dtos/request/create-item.dto';
+import { UpdateItemDto } from '@/modules/Items/dtos/request/update-item.dto';
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
