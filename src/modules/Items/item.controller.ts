@@ -1,10 +1,12 @@
 import { UpdateItemDto } from '@/modules/Items/dtos/request/update-item.dto';
 import { MongoIdParamDto } from '@/modules/schemas/mongo-id-param.schema';
 import { Body, Controller, Delete, Get, Param, Post, Put, Version } from '@nestjs/common';
+import { ApiTags } from '@nestjs/swagger';
 import { CreateItemDto } from './dtos/request/create-item.dto';
 import { ItemService } from './item.service';
 import { Item } from './models/item.model';
 
+@ApiTags('items')
 @Controller('items')
 export class ItemController {
     constructor(private readonly itemService: ItemService) {}

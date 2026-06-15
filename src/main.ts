@@ -17,6 +17,7 @@ async function bootstrap() {
         .setTitle('Rolistica API')
         .setDescription('A dynamic RPG character creator and manager API')
         .setVersion('1.0')
+        .addTag('app', 'Application status')
         .addTag('characters', 'Gestion des personnages')
         .addTag('spells', 'Gestion des sorts')
         .addTag('items', 'Gestion des objets')

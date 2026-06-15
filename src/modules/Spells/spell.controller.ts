@@ -1,10 +1,12 @@
 import { Body, Controller, Delete, Get, Param, Post, Put, Version } from '@nestjs/common';
+import { ApiTags } from '@nestjs/swagger';
 import { MongoIdParamDto } from '../schemas/mongo-id-param.schema';
 import { CreateSpellDto } from './dtos/request/create-spell.dto';
 import { UpdateSpellDto } from './dtos/request/update-spell.dto';
 import { Spell } from './models/spell.model';
 import { SpellService } from './spell.service';
 
+@ApiTags('spells')
 @Controller('spells')
 export class SpellController {
     constructor(private readonly spellService: SpellService) {}
