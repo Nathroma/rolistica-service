@@ -1,10 +1,10 @@
-import { UpdateItemDto } from '@/modules/Items/dtos/request/update-item.dto';
+import { CreateItemDto } from '@/modules/items/dtos/request/create-item.dto';
+import { UpdateItemDto } from '@/modules/items/dtos/request/update-item.dto';
+import { ItemService } from '@/modules/items/item.service';
+import { Item } from '@/modules/items/models/item.model';
 import { MongoIdParamDto } from '@/modules/schemas/mongo-id-param.schema';
 import { Body, Controller, Delete, Get, Param, Post, Put, Version } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
-import { CreateItemDto } from './dtos/request/create-item.dto';
-import { ItemService } from './item.service';
-import { Item } from './models/item.model';
 
 @ApiTags('items')
 @Controller('items')

@@ -1,8 +1,8 @@
-import { Note, NoteDocument } from '@/modules/Notes/models/note.model';
+import { CreateNoteDto } from '@/modules/notes/dto/request/create-note.dto';
+import { Note, NoteDocument } from '@/modules/notes/models/note.model';
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { CreateNoteDto } from './dto/request/create-note.dto';
 
 @Injectable()
 export class NoteService {

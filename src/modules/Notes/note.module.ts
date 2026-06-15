@@ -1,6 +1,6 @@
-import { Note, NoteSchema } from '@/modules/Notes/models/note.model';
-import { NoteController } from '@/modules/Notes/note.controller';
-import { NoteService } from '@/modules/Notes/note.service';
+import { Note, NoteSchema } from '@/modules/notes/models/note.model';
+import { NoteController } from '@/modules/notes/note.controller';
+import { NoteService } from '@/modules/notes/note.service';
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 

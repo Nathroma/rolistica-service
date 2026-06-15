@@ -1,9 +1,9 @@
-import { CreateSpellDto } from '@/modules/Spells/dtos/request/create-spell.dto';
-import { UpdateSpellDto } from '@/modules/Spells/dtos/request/update-spell.dto';
+import { CreateSpellDto } from '@/modules/spells/dtos/request/create-spell.dto';
+import { UpdateSpellDto } from '@/modules/spells/dtos/request/update-spell.dto';
+import { Spell } from '@/modules/spells/models/spell.model';
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { Spell } from './models/spell.model';
 
 @Injectable()
 export class SpellService {

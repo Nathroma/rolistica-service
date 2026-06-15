@@ -1,10 +1,10 @@
+import { MongoIdParamDto } from '@/modules/schemas/mongo-id-param.schema';
+import { CreateSpellDto } from '@/modules/spells/dtos/request/create-spell.dto';
+import { UpdateSpellDto } from '@/modules/spells/dtos/request/update-spell.dto';
+import { Spell } from '@/modules/spells/models/spell.model';
+import { SpellService } from '@/modules/spells/spell.service';
 import { Body, Controller, Delete, Get, Param, Post, Put, Version } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
-import { MongoIdParamDto } from '../schemas/mongo-id-param.schema';
-import { CreateSpellDto } from './dtos/request/create-spell.dto';
-import { UpdateSpellDto } from './dtos/request/update-spell.dto';
-import { Spell } from './models/spell.model';
-import { SpellService } from './spell.service';
 
 @ApiTags('spells')
 @Controller('spells')

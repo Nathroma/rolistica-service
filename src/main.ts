@@ -1,8 +1,8 @@
+import { AppModule } from '@/app/app.module';
 import { VERSION_NEUTRAL, VersioningType } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { cleanupOpenApiDoc } from 'nestjs-zod';
-import { AppModule } from './app/app.module';
 
 async function bootstrap() {
     const app = await NestFactory.create(AppModule);
@@ -28,8 +28,7 @@ async function bootstrap() {
     SwaggerModule.setup('api', app, document);
 
     app.enableCors({
-        origin: '*',
-        methods: 'GET,,PUT,POST,DELETE',
+        methods: 'GET,PUT,POST,DELETE',
         credentials: true,
     });
 
