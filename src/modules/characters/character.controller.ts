@@ -1,6 +1,8 @@
 import { CreateCharacterDto } from '@/modules/characters/dtos/request/create-character.dto';
 import { UpdateCharacterDto } from '@/modules/characters/dtos/request/update-character.dto';
 import { CharacterResponseDto } from '@/modules/characters/dtos/response/character-response.dto';
+import { CharacterItemParamDto } from '@/modules/schemas/character-item-param.schema';
+import { CharacterSpellParamDto } from '@/modules/schemas/character-spell-param.schema';
 import { MongoIdParamDto } from '@/modules/schemas/mongo-id-param.schema';
 import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Post, Put, Version } from '@nestjs/common';
 import { ApiCreatedResponse, ApiNoContentResponse, ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
@@ -63,18 +65,42 @@ export class CharacterController {
         description: 'Add an item to a character.',
     })
     @ApiOkResponse({ type: CharacterResponseDto.Output })
-    async addItemToCharacter(@Param() characterId: MongoIdParamDto, @Param() itemId: MongoIdParamDto) {
-        return this.characterService.addItemToCharacter(characterId.id, itemId.id);
+    async addItemToCharacter(@Param() params: CharacterItemParamDto) {
+        return this.characterService.addItemToCharacter(params.id, params.itemId);
     }
 
     @Version('1')
     @Delete(':id/items/:itemId')
     @ApiOperation({
         summary: 'Remove an item from a character',
-        description: 'Remove an item from a character.',
+        description:
+            'Remove an item snapshot from a character inventory. Use the snapshot _id (from character.items), not the catalog item id.',
     })
     @ApiOkResponse({ type: CharacterResponseDto.Output })
-    async removeItemFromCharacter(@Param() characterId: MongoIdParamDto, @Param() itemSnapshotId: MongoIdParamDto) {
-        return this.characterService.removeItemFromCharacter(characterId.id, itemSnapshotId.id);
+    async removeItemFromCharacter(@Param() params: CharacterItemParamDto) {
+        return this.characterService.removeItemFromCharacter(params.id, params.itemId);
+    }
+
+    @Version('1')
+    @Post(':id/spells/:spellId')
+    @ApiOperation({
+        summary: 'Add an spell to a character',
+        description: 'Add an spell to a character.',
+    })
+    @ApiOkResponse({ type: CharacterResponseDto.Output })
+    async addSpellToCharacter(@Param() params: CharacterSpellParamDto) {
+        return this.characterService.addSpellToCharacter(params.id, params.spellId);
+    }
+
+    @Version('1')
+    @Delete(':id/spells/:spellId')
+    @ApiOperation({
+        summary: 'Remove an spell from a character',
+        description:
+            'Remove an spell snapshot from a character inventory. Use the snapshot _id (from character.spells), not the catalog spell id.',
+    })
+    @ApiOkResponse({ type: CharacterResponseDto.Output })
+    async removeSpellFromCharacter(@Param() params: CharacterSpellParamDto) {
+        return this.characterService.removeSpellFromCharacter(params.id, params.spellId);
     }
 }

@@ -1,7 +1,9 @@
 import { SpellCastingType, SpellDuration, SpellRange, SpellSchool, SpellType } from '@/types/spell';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Exclude, Expose } from 'class-transformer';
+import { HydratedDocument } from 'mongoose';
 
+export type SpellDocument = HydratedDocument<Spell>;
 @Exclude()
 @Schema({
     timestamps: true,

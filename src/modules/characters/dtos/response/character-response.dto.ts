@@ -5,7 +5,7 @@ import { z } from 'zod';
 export const characterResponseSchema = z
     .object({
         _id: z.string().meta({ description: 'MongoDB ID' }),
-        name: z.string().meta({ description: 'Character name', examples: ['Aragorn'] }),
+        name: z.string().meta({ description: 'Character name', examples: ['Tav'] }),
         level: z.number().meta({ description: 'Character level', examples: [5] }),
         stats: characterStatsSchema,
         gameSystem: z.string().meta({ description: 'Game system', examples: ['D&D 5e'] }),

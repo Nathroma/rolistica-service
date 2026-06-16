@@ -1,3 +1,4 @@
+import { Note } from '@/modules/notes/models/note.model';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Exclude, Expose } from 'class-transformer';
 import { HydratedDocument } from 'mongoose';
@@ -104,6 +105,10 @@ export class Character {
     @Expose()
     @Prop({ required: false, type: [CharacterSpellSnapshot] })
     spells: CharacterSpellSnapshot[];
+
+    @Expose()
+    @Prop({ required: false, type: [Note] })
+    notes: Note[];
 
     @Expose()
     @Prop({ default: '' })
