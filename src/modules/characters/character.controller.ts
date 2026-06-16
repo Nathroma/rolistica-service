@@ -55,4 +55,26 @@ export class CharacterController {
     async deleteCharacter(@Param() params: MongoIdParamDto): Promise<void> {
         return this.characterService.deleteCharacter(params.id);
     }
+
+    @Version('1')
+    @Post(':id/items/:itemId')
+    @ApiOperation({
+        summary: 'Add an item to a character',
+        description: 'Add an item to a character.',
+    })
+    @ApiOkResponse({ type: CharacterResponseDto.Output })
+    async addItemToCharacter(@Param() characterId: MongoIdParamDto, @Param() itemId: MongoIdParamDto) {
+        return this.characterService.addItemToCharacter(characterId.id, itemId.id);
+    }
+
+    @Version('1')
+    @Delete(':id/items/:itemId')
+    @ApiOperation({
+        summary: 'Remove an item from a character',
+        description: 'Remove an item from a character.',
+    })
+    @ApiOkResponse({ type: CharacterResponseDto.Output })
+    async removeItemFromCharacter(@Param() characterId: MongoIdParamDto, @Param() itemSnapshotId: MongoIdParamDto) {
+        return this.characterService.removeItemFromCharacter(characterId.id, itemSnapshotId.id);
+    }
 }
