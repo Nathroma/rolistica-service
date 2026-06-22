@@ -45,35 +45,3 @@ export enum SpellDuration {
     days = 'days',
     other = 'other',
 }
-
-export interface Spell {
-    _id: string;
-    name: string;
-    description: string;
-    type: SpellType;
-    level: number;
-    school: string;
-    castingTime: string;
-    range: string;
-    duration: string;
-    concentration: boolean;
-    ritual: boolean;
-    components: string[];
-    createdAt: Date;
-    updatedAt: Date;
-}
-
-export interface CreateSpellRequest {
-    name: string;
-    description: string;
-    type: SpellType;
-    level: number;
-    school: string;
-    castingTime: string;
-    range: string;
-    duration: string;
-    concentration: boolean;
-    ritual: boolean;
-    components: string[];
-    collectionName: string;
-}
