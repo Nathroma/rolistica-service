@@ -1,3 +1,4 @@
+import { Public } from '@/modules/auth/decorators/public.decorator';
 import { CreateItemDto } from '@/modules/items/dtos/request/create-item.dto';
 import { UpdateItemDto } from '@/modules/items/dtos/request/update-item.dto';
 import { ItemService } from '@/modules/items/item.service';
@@ -7,6 +8,7 @@ import { Body, Controller, Delete, Get, Param, Post, Put, Version } from '@nestj
 import { ApiTags } from '@nestjs/swagger';
 
 @ApiTags('items')
+@Public()
 @Controller('items')
 export class ItemController {
     constructor(private readonly itemService: ItemService) {}

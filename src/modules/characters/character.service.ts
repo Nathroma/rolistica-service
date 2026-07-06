@@ -16,36 +16,44 @@ export class CharacterService {
         @InjectModel(Spell.name) private spellModel: Model<SpellDocument>,
     ) {}
 
-    async getCharacter(id: MongoId): Promise<Character> {
-        const character = await this.characterModel.findById(id);
+    async getCharacterList(userId: string): Promise<Character[]> {
+        return this.characterModel.find({ userId });
+    }
+
+    async getCharacter(id: MongoId, userId: string): Promise<Character> {
+        const character = await this.characterModel.findOne({ _id: id, userId });
         if (!character) {
             throw new NotFoundException('Character not found, Verify the ID');
         }
         return character;
     }
 
-    async createCharacter(createCharacterDto: CreateCharacterDto): Promise<Character> {
-        const character = new this.characterModel(createCharacterDto);
-        return await character.save();
+    async createCharacter(createCharacterDto: CreateCharacterDto, userId: string): Promise<Character> {
+        const character = new this.characterModel({ ...createCharacterDto, userId });
+        return character.save();
     }
 
-    async updateCharacter(id: MongoId, updateCharacterDto: UpdateCharacterDto): Promise<Character> {
-        const character = await this.characterModel.findByIdAndUpdate(id, updateCharacterDto, { new: true });
+    async updateCharacter(id: MongoId, updateCharacterDto: UpdateCharacterDto, userId: string): Promise<Character> {
+        const character = await this.characterModel.findOneAndUpdate({ _id: id, userId }, updateCharacterDto, {
+            new: true,
+        });
         if (!character) {
             throw new NotFoundException();
         }
         return character;
     }
 
-    async deleteCharacter(id: MongoId): Promise<void> {
-        const character = await this.characterModel.findById(id);
+    async deleteCharacter(id: MongoId, userId: string): Promise<void> {
+        const character = await this.characterModel.findOne({ _id: id, userId });
         if (!character) {
             throw new NotFoundException();
         }
         await character.deleteOne();
     }
 
-    async addItemToCharacter(characterId: MongoId, catalogItemId: MongoId): Promise<Character> {
+    async addItemToCharacter(characterId: MongoId, catalogItemId: MongoId, userId: string): Promise<Character> {
+        await this.assertCharacterOwnership(characterId, userId);
+
         const item = await this.itemModel.findById(catalogItemId);
         if (!item) {
             throw new NotFoundException();
@@ -76,9 +84,9 @@ export class CharacterService {
         return character;
     }
 
-    async removeItemFromCharacter(characterId: MongoId, snapshotId: MongoId): Promise<Character> {
+    async removeItemFromCharacter(characterId: MongoId, snapshotId: MongoId, userId: string): Promise<Character> {
         const character = await this.characterModel.findOneAndUpdate(
-            { _id: characterId, 'items._id': snapshotId },
+            { '_id': characterId, 'userId': userId, 'items._id': snapshotId },
             { $pull: { items: { _id: snapshotId } } },
             { new: true },
         );
@@ -90,7 +98,9 @@ export class CharacterService {
         return character;
     }
 
-    async addSpellToCharacter(characterId: MongoId, catalogSpellId: MongoId): Promise<Character> {
+    async addSpellToCharacter(characterId: MongoId, catalogSpellId: MongoId, userId: string): Promise<Character> {
+        await this.assertCharacterOwnership(characterId, userId);
+
         const spell = await this.spellModel.findById(catalogSpellId);
         if (!spell) {
             throw new NotFoundException();
@@ -124,9 +134,9 @@ export class CharacterService {
         return character;
     }
 
-    async removeSpellFromCharacter(characterId: MongoId, snapshotId: MongoId): Promise<Character> {
+    async removeSpellFromCharacter(characterId: MongoId, snapshotId: MongoId, userId: string): Promise<Character> {
         const character = await this.characterModel.findOneAndUpdate(
-            { _id: characterId, 'spells._id': snapshotId },
+            { '_id': characterId, 'userId': userId, 'spells._id': snapshotId },
             { $pull: { spells: { _id: snapshotId } } },
             { new: true },
         );
@@ -135,6 +145,14 @@ export class CharacterService {
             throw new NotFoundException();
         }
 
+        return character;
+    }
+
+    private async assertCharacterOwnership(characterId: MongoId, userId: string): Promise<CharacterDocument> {
+        const character = await this.characterModel.findOne({ _id: characterId, userId });
+        if (!character) {
+            throw new NotFoundException();
+        }
         return character;
     }
 }

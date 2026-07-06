@@ -14,6 +14,9 @@ export const characterSpellSnapshotSchema = z
         duration: z.string().optional().meta({ description: 'Spell duration', examples: 'Instantaneous' }),
         concentration: z.boolean().optional().meta({ description: 'Requires concentration', examples: false }),
         ritual: z.boolean().optional().meta({ description: 'Can be cast as ritual', examples: false }),
-        components: z.array(z.string()).optional().meta({ description: 'Spell components', examples: 'V', 'S', 'M' }),
+        components: z
+            .array(z.string())
+            .optional()
+            .meta({ description: 'Spell components', examples: ['V', 'S', 'M'] }),
     })
     .meta({ id: 'CharacterSpellSnapshot', title: 'Character spell snapshot' });

@@ -18,10 +18,12 @@ async function bootstrap() {
         .setDescription('A dynamic RPG character creator and manager API')
         .setVersion('1.0')
         .addTag('app', 'Application status')
+        .addTag('auth', 'Authentification')
         .addTag('characters', 'Gestion des personnages')
         .addTag('spells', 'Gestion des sorts')
         .addTag('items', 'Gestion des objets')
         .addTag('notes', 'Gestion des notes')
+        .addBearerAuth()
         .build();
 
     const document = cleanupOpenApiDoc(SwaggerModule.createDocument(app, config));

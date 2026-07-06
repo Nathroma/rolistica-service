@@ -1,5 +1,6 @@
 import { AppController } from '@/app/app.controller';
 import { AppService } from '@/app/app.service';
+import { AuthModule } from '@/modules/auth/auth.module';
 import { CharacterModule } from '@/modules/characters/character.module';
 import { ItemModule } from '@/modules/items/item.module';
 import { NoteModule } from '@/modules/notes/note.module';
@@ -11,6 +12,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 @Module({
     imports: [
         MongooseModule.forRoot(process.env.MONGO_DB_ENDPOINT || 'mongodb://localhost:27017/rolistica'),
+        AuthModule,
         CharacterModule,
         ItemModule,
         SpellModule,

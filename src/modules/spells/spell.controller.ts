@@ -1,3 +1,4 @@
+import { Public } from '@/modules/auth/decorators/public.decorator';
 import { MongoIdParamDto } from '@/modules/schemas/mongo-id-param.schema';
 import { CreateSpellDto } from '@/modules/spells/dtos/request/create-spell.dto';
 import { UpdateSpellDto } from '@/modules/spells/dtos/request/update-spell.dto';
@@ -7,6 +8,7 @@ import { Body, Controller, Delete, Get, Param, Post, Put, Version } from '@nestj
 import { ApiTags } from '@nestjs/swagger';
 
 @ApiTags('spells')
+@Public()
 @Controller('spells')
 export class SpellController {
     constructor(private readonly spellService: SpellService) {}

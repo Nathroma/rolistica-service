@@ -8,7 +8,7 @@ export const createCharacterSchema = z
         gameSystem: z
             .string()
             .optional()
-            .meta({ description: 'Game system', examples: 'D&D 5e', 'Custom' }),
+            .meta({ description: 'Game system', examples: ['D&D 5e', 'Custom'] }),
         level: z.number().min(1).max(20).optional().meta({ description: 'Character level', examples: 5 }),
         stats: characterStatsSchema,
     })
