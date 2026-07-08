@@ -1,10 +1,13 @@
 import { AuthService } from '@/modules/auth/auth.service';
 import { CurrentUser } from '@/modules/auth/decorators/current-user.decorator';
 import { Public } from '@/modules/auth/decorators/public.decorator';
+import { ForgotPasswordDto } from '@/modules/auth/dtos/request/forgot-password.dto';
 import { LoginDto } from '@/modules/auth/dtos/request/login.dto';
 import { RefreshTokenDto } from '@/modules/auth/dtos/request/refresh-token.dto';
 import { RegisterDto } from '@/modules/auth/dtos/request/register.dto';
+import { ResetPasswordDto } from '@/modules/auth/dtos/request/reset-password.dto';
 import { AuthResponseDto } from '@/modules/auth/dtos/response/auth-response.dto';
+import { MessageResponseDto } from '@/modules/auth/dtos/response/message-response.dto';
 import { UserResponseDto } from '@/modules/auth/dtos/response/user-response.dto';
 import { AuthUser } from '@/modules/auth/types/auth-user.type';
 import { UserService } from '@/modules/users/user.service';
@@ -55,6 +58,37 @@ export class AuthController {
     @ApiOkResponse({ type: AuthResponseDto })
     async refresh(@Body() refreshTokenDto: RefreshTokenDto): Promise<AuthResponseDto> {
         return this.authService.refresh(refreshTokenDto.refreshToken);
+    }
+
+    @Public()
+    @Version('1')
+    @Post('forgot-password')
+    @HttpCode(HttpStatus.OK)
+    @ApiOperation({
+        summary: 'Request a password reset',
+        description:
+            'Send a password reset link to the given email if an account exists. Always returns the same response to prevent account enumeration.',
+    })
+    @ApiOkResponse({ type: MessageResponseDto })
+    async forgotPassword(@Body() forgotPasswordDto: ForgotPasswordDto): Promise<MessageResponseDto> {
+        return this.authService.forgotPassword(forgotPasswordDto.email);
+    }
+
+    @Public()
+    @Version('1')
+    @Post('reset-password')
+    @HttpCode(HttpStatus.OK)
+    @ApiOperation({
+        summary: 'Reset password',
+        description: 'Set a new password using the token received by email. Invalidates all active sessions.',
+    })
+    @ApiOkResponse({ type: MessageResponseDto })
+    async resetPassword(@Body() resetPasswordDto: ResetPasswordDto): Promise<MessageResponseDto> {
+        return this.authService.resetPassword(
+            resetPasswordDto.email,
+            resetPasswordDto.token,
+            resetPasswordDto.newPassword,
+        );
     }
 
     @Version('1')

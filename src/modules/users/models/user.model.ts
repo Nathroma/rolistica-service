@@ -19,6 +19,12 @@ export class User {
 
     @Prop({ required: false, type: String, select: false })
     refreshTokenHash?: string;
+
+    @Prop({ required: false, type: String, select: false })
+    resetPasswordTokenHash?: string;
+
+    @Prop({ required: false, type: Date, select: false })
+    resetPasswordExpiresAt?: Date;
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);
