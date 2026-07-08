@@ -38,7 +38,11 @@ export class UserService {
             .select('+passwordHash +resetPasswordTokenHash +resetPasswordExpiresAt');
     }
 
-    async setResetPasswordToken(userId: string, resetPasswordTokenHash: string, resetPasswordExpiresAt: Date): Promise<void> {
+    async setResetPasswordToken(
+        userId: string,
+        resetPasswordTokenHash: string,
+        resetPasswordExpiresAt: Date,
+    ): Promise<void> {
         await this.userModel.findByIdAndUpdate(userId, { resetPasswordTokenHash, resetPasswordExpiresAt });
     }
 

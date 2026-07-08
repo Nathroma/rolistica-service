@@ -1,6 +1,7 @@
+import { parsedEnv } from '@/config/env';
 import { Injectable, Logger } from '@nestjs/common';
-import * as nodemailer from 'nodemailer';
 import type { Transporter } from 'nodemailer';
+import * as nodemailer from 'nodemailer';
 
 const HOSTINGER_MAX_EMAILS_PER_MINUTE = 5;
 const MIN_INTERVAL_MS = 60_000 / HOSTINGER_MAX_EMAILS_PER_MINUTE;
@@ -11,21 +12,16 @@ export class MailService {
     private transporter: Transporter | null = null;
     private lastSentAt = 0;
 
-    private getTransporter(): Transporter | null {
-        const host = process.env.SMTP_HOST;
-        const user = process.env.SMTP_USER;
-        const pass = process.env.SMTP_PASSWORD;
-
-        if (!host || !user || !pass) {
-            return null;
-        }
-
+    private getTransporter(): Transporter {
         if (!this.transporter) {
             this.transporter = nodemailer.createTransport({
-                host,
-                port: parseInt(process.env.SMTP_PORT || '587'),
-                secure: process.env.SMTP_SECURE === 'true',
-                auth: { user, pass },
+                host: parsedEnv.SMTP_HOST,
+                port: parsedEnv.SMTP_PORT,
+                secure: parsedEnv.SMTP_SECURE,
+                auth: {
+                    user: parsedEnv.SMTP_USER,
+                    pass: parsedEnv.SMTP_PASSWORD,
+                },
             });
         }
 
@@ -33,7 +29,6 @@ export class MailService {
     }
 
     async sendPasswordResetEmail(to: string, resetUrl: string): Promise<void> {
-        const from = process.env.SMTP_FROM || process.env.SMTP_USER;
         const subject = 'Réinitialisation de votre mot de passe — Rolistica';
         const text = [
             'Bonjour,',
@@ -43,7 +38,7 @@ export class MailService {
             '',
             resetUrl,
             '',
-            'Si vous n\'êtes pas à l\'origine de cette demande, ignorez cet email.',
+            "Si vous n'êtes pas à l'origine de cette demande, ignorez cet email.",
         ].join('\n');
 
         const html = `
@@ -54,17 +49,16 @@ export class MailService {
             <p>Si vous n'êtes pas à l'origine de cette demande, ignorez cet email.</p>
         `;
 
-        const transporter = this.getTransporter();
-
-        if (!transporter) {
-            this.logger.warn('SMTP not configured — password reset link (dev only):');
-            this.logger.warn(resetUrl);
-            return;
-        }
-
         await this.waitForRateLimit();
 
-        await transporter.sendMail({ from, to, subject, text, html });
+        await this.getTransporter().sendMail({
+            from: parsedEnv.SMTP_FROM,
+            to,
+            subject,
+            text,
+            html,
+        });
+
         this.lastSentAt = Date.now();
     }
 

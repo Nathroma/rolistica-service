@@ -1,5 +1,6 @@
 import { AppController } from '@/app/app.controller';
 import { AppService } from '@/app/app.service';
+import { env } from '@/config/env';
 import { AuthModule } from '@/modules/auth/auth.module';
 import { CharacterModule } from '@/modules/characters/character.module';
 import { ItemModule } from '@/modules/items/item.module';
@@ -11,7 +12,7 @@ import { APP_PIPE } from '@nestjs/core';
 import { MongooseModule } from '@nestjs/mongoose';
 @Module({
     imports: [
-        MongooseModule.forRoot(process.env.MONGO_DB_ENDPOINT || 'mongodb://localhost:27017/rolistica'),
+        MongooseModule.forRoot(env.MONGO_DB_ENDPOINT),
         AuthModule,
         CharacterModule,
         ItemModule,

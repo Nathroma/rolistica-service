@@ -1,7 +1,7 @@
+import { MongoId } from '@/modules/schemas/mongo-id.schema';
 import { CreateSpellDto } from '@/modules/spells/dtos/request/create-spell.dto';
 import { UpdateSpellDto } from '@/modules/spells/dtos/request/update-spell.dto';
 import { Spell } from '@/modules/spells/models/spell.model';
-import { MongoId } from '@/modules/schemas/mongo-id.schema';
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';

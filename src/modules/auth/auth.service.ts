@@ -1,15 +1,14 @@
+import { parsedEnv } from '@/config/env';
 import { AuthResponseDto } from '@/modules/auth/dtos/response/auth-response.dto';
 import { MessageResponseDto } from '@/modules/auth/dtos/response/message-response.dto';
 import { JwtPayload } from '@/modules/auth/types/jwt-payload.type';
 import { MailService } from '@/modules/mail/mail.service';
 import { UserService } from '@/modules/users/user.service';
 import { BadRequestException, ConflictException, Injectable, UnauthorizedException } from '@nestjs/common';
-import { JwtService } from '@nestjs/jwt';
+import { JwtService, JwtSignOptions } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
 import { randomBytes } from 'crypto';
 
-const ACCESS_TOKEN_EXPIRES_IN = '15m';
-const REFRESH_TOKEN_EXPIRES_IN = '7d';
 const BCRYPT_ROUNDS = 12;
 const RESET_PASSWORD_EXPIRES_IN_MS = 15 * 60 * 1000;
 const FORGOT_PASSWORD_MESSAGE = 'If an account exists for this email, a password reset link has been sent.';
@@ -53,7 +52,7 @@ export class AuthService {
 
         try {
             payload = this.jwtService.verify<JwtPayload>(refreshToken, {
-                secret: process.env.JWT_REFRESH_SECRET,
+                secret: parsedEnv.JWT_REFRESH_SECRET,
             });
         } catch {
             throw new UnauthorizedException('Invalid refresh token');
@@ -86,8 +85,7 @@ export class AuthService {
 
             await this.userService.setResetPasswordToken(user.id, resetPasswordTokenHash, resetPasswordExpiresAt);
 
-            const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:5173';
-            const resetUrl = `${frontendUrl}/reset-password?email=${encodeURIComponent(user.email)}&token=${resetToken}`;
+            const resetUrl = `${parsedEnv.FRONTEND_URL}/reset-password?email=${encodeURIComponent(user.email)}&token=${resetToken}`;
 
             await this.mailService.sendPasswordResetEmail(user.email, resetUrl);
         }
@@ -125,14 +123,14 @@ export class AuthService {
         const payload: JwtPayload = { sub: userId, email };
 
         const accessToken = this.jwtService.sign(payload, {
-            secret: process.env.JWT_SECRET,
-            expiresIn: ACCESS_TOKEN_EXPIRES_IN,
-        });
+            secret: parsedEnv.JWT_SECRET,
+            expiresIn: parsedEnv.ACCESS_TOKEN_EXPIRATION_TIME,
+        } as JwtSignOptions);
 
         const refreshToken = this.jwtService.sign(payload, {
-            secret: process.env.JWT_REFRESH_SECRET,
-            expiresIn: REFRESH_TOKEN_EXPIRES_IN,
-        });
+            secret: parsedEnv.JWT_REFRESH_SECRET,
+            expiresIn: parsedEnv.REFRESH_TOKEN_EXPIRATION_TIME,
+        } as JwtSignOptions);
 
         const refreshTokenHash = await bcrypt.hash(refreshToken, BCRYPT_ROUNDS);
         await this.userService.updateRefreshTokenHash(userId, refreshTokenHash);

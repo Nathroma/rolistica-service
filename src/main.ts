@@ -1,4 +1,5 @@
 import { AppModule } from '@/app/app.module';
+import { parsedEnv } from '@/config/env';
 import { VERSION_NEUTRAL, VersioningType } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
@@ -34,12 +35,12 @@ async function bootstrap() {
         credentials: true,
     });
 
-    const port = parseInt(process.env.APP_API_PORT || '4000');
-    const host = process.env.APP_HOSTNAME || 'localhost';
-    await app.listen(port, host);
+    await app.listen(parsedEnv.APP_API_PORT, parsedEnv.APP_HOSTNAME);
 
-    console.log(`🚀 Application en cours d'exécution sur http://${host}:${port}`);
-    console.log(`📚 Documentation Swagger disponible sur http://${host}:${port}/api`);
+    console.log(`🚀 Application en cours d'exécution sur http://${parsedEnv.APP_HOSTNAME}:${parsedEnv.APP_API_PORT}`);
+    console.log(
+        `📚 Documentation Swagger disponible sur http://${parsedEnv.APP_HOSTNAME}:${parsedEnv.APP_API_PORT}/api`,
+    );
 }
 
 bootstrap();
