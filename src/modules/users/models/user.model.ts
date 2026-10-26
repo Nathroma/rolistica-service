@@ -12,10 +12,10 @@ export type UserDocument = HydratedDocument<User>;
 export class User {
     @Expose()
     @Prop({ required: true, unique: true, lowercase: true, trim: true, type: String })
-    email: string;
+    email!: string;
 
     @Prop({ required: true, type: String, select: false })
-    passwordHash: string;
+    passwordHash!: string;
 
     @Prop({ required: false, type: String, select: false })
     refreshTokenHash?: string;

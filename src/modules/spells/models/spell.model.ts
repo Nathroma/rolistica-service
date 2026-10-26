@@ -12,19 +12,19 @@ export type SpellDocument = HydratedDocument<Spell>;
 export class Spell {
     @Expose()
     @Prop({ required: true, type: String })
-    name: string;
+    name!: string;
 
     @Expose()
     @Prop({ required: false, type: String })
-    description: string;
+    description?: string;
 
     @Expose()
     @Prop({ required: true, type: String, enum: SpellType })
-    type: SpellType;
+    type!: SpellType;
 
     @Expose()
     @Prop({ required: false, type: Number })
-    level: number;
+    level?: number;
 
     @Expose()
     @Prop({ required: false, type: String, enum: SpellSchool })

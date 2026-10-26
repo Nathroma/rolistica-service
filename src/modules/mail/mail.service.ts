@@ -29,24 +29,24 @@ export class MailService {
     }
 
     async sendPasswordResetEmail(to: string, resetUrl: string): Promise<void> {
-        const subject = 'Réinitialisation de votre mot de passe — Rolistica';
+        const subject = 'Password reset — Rolistica';
         const text = [
-            'Bonjour,',
+            'Hello,',
             '',
-            'Vous avez demandé la réinitialisation de votre mot de passe.',
-            'Cliquez sur le lien ci-dessous (valable 15 minutes) :',
+            'You have requested a password reset.',
+            'Click the link below (valid for 15 minutes) :',
             '',
             resetUrl,
             '',
-            "Si vous n'êtes pas à l'origine de cette demande, ignorez cet email.",
+            'If you did not request a password reset, please ignore this email.',
         ].join('\n');
 
         const html = `
-            <p>Bonjour,</p>
-            <p>Vous avez demandé la réinitialisation de votre mot de passe.</p>
-            <p><a href="${resetUrl}">Réinitialiser mon mot de passe</a></p>
-            <p>Ce lien est valable <strong>15 minutes</strong>.</p>
-            <p>Si vous n'êtes pas à l'origine de cette demande, ignorez cet email.</p>
+            <p>Hello,</p>
+            <p>You have requested a password reset.</p>
+            <p><a href="${resetUrl}">Reset your password</a></p>
+            <p>This link is valid for <strong>15 minutes</strong>.</p>
+            <p>If you did not request a password reset, please ignore this email.</p>
         `;
 
         await this.waitForRateLimit();

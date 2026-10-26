@@ -1,4 +1,4 @@
-import { createZodDto } from 'nestjs-zod';
+import { createZodDto, ZodDto } from 'nestjs-zod';
 import { z } from 'zod';
 import { mongoIdSchema } from './mongo-id.schema';
 
@@ -13,4 +13,6 @@ export const characterSpellParamSchema = z
     })
     .meta({ id: 'CharacterSpellParam' });
 
-export class CharacterSpellParamDto extends createZodDto(characterSpellParamSchema) {}
+const CharacterSpellParamDtoBase: ZodDto<typeof characterSpellParamSchema> = createZodDto(characterSpellParamSchema);
+
+export class CharacterSpellParamDto extends CharacterSpellParamDtoBase {}

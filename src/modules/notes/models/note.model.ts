@@ -12,15 +12,15 @@ export type NoteDocument = HydratedDocument<Note>;
 export class Note {
     @Expose()
     @Prop({ required: true, type: Types.ObjectId })
-    _id: Types.ObjectId;
+    _id!: Types.ObjectId;
 
     @Expose()
     @Prop({ required: false, type: String })
-    title: string;
+    title?: string;
 
     @Expose()
     @Prop({ required: false, type: String })
-    content: string;
+    content?: string;
 }
 
 export const NoteSchema = SchemaFactory.createForClass(Note);

@@ -1,5 +1,5 @@
 import { mongoIdSchema } from '@/modules/schemas/mongo-id.schema';
-import { createZodDto } from 'nestjs-zod';
+import { createZodDto, ZodDto } from 'nestjs-zod';
 import { z } from 'zod';
 
 export const characterNoteParamSchema = z
@@ -13,4 +13,6 @@ export const characterNoteParamSchema = z
     })
     .meta({ id: 'CharacterNoteParam' });
 
-export class CharacterNoteParamDto extends createZodDto(characterNoteParamSchema) {}
+const CharacterNoteParamDtoBase: ZodDto<typeof characterNoteParamSchema> = createZodDto(characterNoteParamSchema);
+
+export class CharacterNoteParamDto extends CharacterNoteParamDtoBase {}

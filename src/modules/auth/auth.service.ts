@@ -4,7 +4,7 @@ import { MessageResponseDto } from '@/modules/auth/dtos/response/message-respons
 import { JwtPayload } from '@/modules/auth/types/jwt-payload.type';
 import { MailService } from '@/modules/mail/mail.service';
 import { UserService } from '@/modules/users/user.service';
-import { BadRequestException, ConflictException, Injectable, UnauthorizedException } from '@nestjs/common';
+import { BadRequestException, Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService, JwtSignOptions } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
 import { randomBytes } from 'crypto';
@@ -24,7 +24,8 @@ export class AuthService {
     async register(email: string, password: string): Promise<AuthResponseDto> {
         const existingUser = await this.userService.findByEmail(email);
         if (existingUser) {
-            throw new ConflictException('Email already in use');
+            // No explicite message to avoid leaking information
+            throw new BadRequestException('Incorrect information');
         }
 
         const passwordHash = await bcrypt.hash(password, BCRYPT_ROUNDS);
@@ -36,12 +37,14 @@ export class AuthService {
     async login(email: string, password: string): Promise<AuthResponseDto> {
         const user = await this.userService.findByEmailWithPassword(email);
         if (!user) {
-            throw new UnauthorizedException('Invalid credentials');
+            // No explicite message to avoid leaking information
+            throw new BadRequestException('Incorrect information');
         }
 
-        const isPasswordValid = await bcrypt.compare(password, user.passwordHash);
+        const isPasswordValid = await bcrypt.compare(password, user!.passwordHash);
         if (!isPasswordValid) {
-            throw new UnauthorizedException('Invalid credentials');
+            // No explicite message to avoid leaking information
+            throw new BadRequestException('Incorrect information');
         }
 
         return this.issueTokens(user.id, user.email);
