@@ -1,5 +1,5 @@
 import { partialCharacterStatsSchema } from '@/modules/characters/dtos/shared/character-stats.schema';
-import { createZodDto } from 'nestjs-zod';
+import { createZodDto, ZodDto } from 'nestjs-zod';
 import { z } from 'zod';
 
 export const updateCharacterSchema = z
@@ -11,4 +11,6 @@ export const updateCharacterSchema = z
     })
     .meta({ id: 'UpdateCharacter', title: 'Update a character' });
 
-export class UpdateCharacterDto extends createZodDto(updateCharacterSchema) {}
+const UpdateCharacterDtoBase: ZodDto<typeof updateCharacterSchema> = createZodDto(updateCharacterSchema);
+
+export class UpdateCharacterDto extends UpdateCharacterDtoBase {}

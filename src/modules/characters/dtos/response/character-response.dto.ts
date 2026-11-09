@@ -2,7 +2,7 @@ import { characterItemSnapshotSchema } from '@/modules/characters/dtos/shared/ch
 import { characterSpellSnapshotSchema } from '@/modules/characters/dtos/shared/character-spell-snapshot.schema';
 import { characterStatsSchema } from '@/modules/characters/dtos/shared/character-stats.schema';
 import { noteResponseSchema } from '@/modules/notes/dto/response/note-response.dto';
-import { createZodDto } from 'nestjs-zod';
+import { createZodDto, type ZodDto } from 'nestjs-zod';
 import { z } from 'zod';
 
 export const characterResponseSchema = z
@@ -20,4 +20,23 @@ export const characterResponseSchema = z
     })
     .meta({ id: 'Character', title: 'Character' });
 
-export class CharacterResponseDto extends createZodDto(characterResponseSchema) {}
+export const characterInfosResponseSchema = z
+    .object({
+        _id: z.string(),
+        name: z.string().meta({ description: 'Character name', examples: 'Tav' }),
+        level: z.number().meta({ description: 'Character level', examples: 5 }),
+        gameSystem: z.string().meta({ description: 'Game system', examples: 'D&D 5e' }),
+        collectionName: z.string().meta({ description: 'Collection name' }),
+        createdAt: z.string().meta({ description: 'Creation date' }),
+        updatedAt: z.string().meta({ description: 'Last modification date' }),
+    })
+    .meta({ id: 'CharacterInfos', title: 'Character infos' });
+
+const CharacterResponseDtoBase: ZodDto<typeof characterResponseSchema> = createZodDto(characterResponseSchema);
+
+export class CharacterResponseDto extends CharacterResponseDtoBase {}
+
+const CharacterInfosResponseDtoBase: ZodDto<typeof characterInfosResponseSchema> =
+    createZodDto(characterInfosResponseSchema);
+
+export class CharacterInfosResponseDto extends CharacterInfosResponseDtoBase {}

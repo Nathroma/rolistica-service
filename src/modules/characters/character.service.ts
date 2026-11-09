@@ -1,10 +1,10 @@
 import { CreateCharacterDto } from '@/modules/characters/dtos/request/create-character.dto';
 import { UpdateCharacterDto } from '@/modules/characters/dtos/request/update-character.dto';
-import { Character, CharacterDocument } from '@/modules/characters/models/character.model';
+import { Character, CharacterDocument, CharacterInfos } from '@/modules/characters/models/character.model';
 import { Item, ItemDocument } from '@/modules/items/models/item.model';
 import { MongoId } from '@/modules/schemas/mongo-id.schema';
 import { Spell, SpellDocument } from '@/modules/spells/models/spell.model';
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, Types } from 'mongoose';
 
@@ -16,8 +16,20 @@ export class CharacterService {
         @InjectModel(Spell.name) private spellModel: Model<SpellDocument>,
     ) {}
 
-    async getCharacterList(userId: string): Promise<Character[]> {
-        return this.characterModel.find({ userId });
+    async getCharacterList(userId: string): Promise<CharacterInfos[]> {
+        const characters = await this.characterModel.find({ userId });
+        if (!characters) {
+            return [];
+        }
+        return characters.map((character) => ({
+            _id: character._id.toString(),
+            name: character.name,
+            level: character.level,
+            gameSystem: character.gameSystem,
+            collectionName: character.collectionName,
+            createdAt: character.createdAt,
+            updatedAt: character.updatedAt,
+        }));
     }
 
     async getCharacter(id: MongoId, userId: string): Promise<Character> {
@@ -29,7 +41,11 @@ export class CharacterService {
     }
 
     async createCharacter(createCharacterDto: CreateCharacterDto, userId: string): Promise<Character> {
-        const character = new this.characterModel({ ...createCharacterDto, userId });
+        const rawData = { ...createCharacterDto };
+        if (rawData.name === undefined) {
+            throw new BadRequestException('Name is required');
+        }
+        const character = new this.characterModel({ ...rawData, userId });
         return character.save();
     }
 

@@ -10,19 +10,19 @@ class CharacterItemSnapshot {
     sourceItemId?: string;
 
     @Prop({ required: true, type: String })
-    name: string;
+    name!: string;
 
     @Prop({ required: false, type: String })
     description?: string;
 
     @Prop({ required: true, type: Number })
-    quantity: number;
+    quantity!: number;
 
     @Prop({ required: true, type: Number, default: 0 })
-    weight: number;
+    weight!: number;
 
     @Prop({ required: true, type: String })
-    type: string;
+    type!: string;
 
     @Prop({ required: false, type: String })
     damage?: string;
@@ -36,7 +36,7 @@ class CharacterSpellSnapshot {
     sourceSpellId?: string;
 
     @Prop({ required: true, type: String })
-    name: string;
+    name!: string;
 
     @Prop({ required: false, type: String })
     description?: string;
@@ -62,20 +62,53 @@ class CharacterSpellSnapshot {
     timestamps: true,
     collection: 'characters',
 })
-export class Character {
-    @Prop({ required: false, type: String })
-    userId: string;
+export class CharacterInfos {
+    @Prop({ required: true, type: String })
+    _id!: string;
 
     @Prop({ required: false, type: String })
-    collectionName: string;
+    collectionName!: string;
 
     @Expose()
     @Prop({ required: true })
-    name: string;
+    name!: string;
 
     @Expose()
     @Prop({ default: 1, min: 1, max: 20 })
-    level: number;
+    level!: number;
+
+    @Expose()
+    @Prop({ default: '' })
+    gameSystem!: string;
+
+    @Expose()
+    @Prop({ required: true, type: Date })
+    createdAt!: Date;
+
+    @Expose()
+    @Prop({ required: true, type: Date })
+    updatedAt!: Date;
+}
+
+@Exclude()
+@Schema({
+    timestamps: true,
+    collection: 'characters',
+})
+export class Character {
+    @Prop({ required: false, type: String })
+    userId!: string;
+
+    @Prop({ required: false, type: String })
+    collectionName!: string;
+
+    @Expose()
+    @Prop({ required: true })
+    name!: string;
+
+    @Expose()
+    @Prop({ default: 1, min: 1, max: 20 })
+    level!: number;
 
     @Expose()
     @Prop({
@@ -89,7 +122,7 @@ export class Character {
             charisma: { type: Number, default: 10, min: 1, max: 30 },
         },
     })
-    stats: {
+    stats!: {
         strength: number;
         dexterity: number;
         constitution: number;
@@ -100,19 +133,27 @@ export class Character {
 
     @Expose()
     @Prop({ required: false, type: [CharacterItemSnapshot] })
-    items: CharacterItemSnapshot[];
+    items!: CharacterItemSnapshot[];
 
     @Expose()
     @Prop({ required: false, type: [CharacterSpellSnapshot] })
-    spells: CharacterSpellSnapshot[];
+    spells!: CharacterSpellSnapshot[];
 
     @Expose()
     @Prop({ required: false, type: [Note] })
-    notes: Note[];
+    notes!: Note[];
 
     @Expose()
     @Prop({ default: '' })
-    gameSystem: string;
+    gameSystem!: string;
+
+    @Expose()
+    @Prop({ required: true, type: Date })
+    createdAt!: Date;
+
+    @Expose()
+    @Prop({ required: true, type: Date })
+    updatedAt!: Date;
 }
 
 export const CharacterSchema = SchemaFactory.createForClass(Character);

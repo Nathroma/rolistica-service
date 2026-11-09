@@ -2,7 +2,10 @@ import { CurrentUser } from '@/modules/auth/decorators/current-user.decorator';
 import { AuthUser } from '@/modules/auth/types/auth-user.type';
 import { CreateCharacterDto } from '@/modules/characters/dtos/request/create-character.dto';
 import { UpdateCharacterDto } from '@/modules/characters/dtos/request/update-character.dto';
-import { CharacterResponseDto } from '@/modules/characters/dtos/response/character-response.dto';
+import {
+    CharacterInfosResponseDto,
+    CharacterResponseDto,
+} from '@/modules/characters/dtos/response/character-response.dto';
 import { CharacterItemParamDto } from '@/modules/schemas/character-item-param.schema';
 import { CharacterSpellParamDto } from '@/modules/schemas/character-spell-param.schema';
 import { MongoIdParamDto } from '@/modules/schemas/mongo-id-param.schema';
@@ -28,7 +31,7 @@ export class CharacterController {
         summary: 'Get characters list',
         description: 'Get all characters belonging to the authenticated user.',
     })
-    @ApiOkResponse({ type: CharacterResponseDto.Output, isArray: true })
+    @ApiOkResponse({ type: CharacterInfosResponseDto, isArray: true })
     async getCharacterList(@CurrentUser() user: AuthUser) {
         return this.characterService.getCharacterList(user.userId);
     }
@@ -38,7 +41,7 @@ export class CharacterController {
         summary: 'Get a character',
         description: 'Get a character by Mongo ID. Only accessible if it belongs to the authenticated user.',
     })
-    @ApiOkResponse({ type: CharacterResponseDto.Output })
+    @ApiOkResponse({ type: CharacterResponseDto })
     async getCharacter(@Param() params: MongoIdParamDto, @CurrentUser() user: AuthUser) {
         return this.characterService.getCharacter(params.id, user.userId);
     }
@@ -49,7 +52,7 @@ export class CharacterController {
         description:
             'Create a new character with its base statistics. It is automatically linked to the authenticated user.',
     })
-    @ApiCreatedResponse({ type: CharacterResponseDto.Output })
+    @ApiCreatedResponse({ type: CharacterResponseDto })
     async createCharacter(@Body() createCharacterDto: CreateCharacterDto, @CurrentUser() user: AuthUser) {
         return this.characterService.createCharacter(createCharacterDto, user.userId);
     }
@@ -59,7 +62,7 @@ export class CharacterController {
         summary: 'Update a character',
         description: 'Update an existing character partially. Only accessible if it belongs to the authenticated user.',
     })
-    @ApiOkResponse({ type: CharacterResponseDto.Output })
+    @ApiOkResponse({ type: CharacterResponseDto })
     async updateCharacter(
         @Param() params: MongoIdParamDto,
         @Body() updateCharacterDto: UpdateCharacterDto,
@@ -84,7 +87,7 @@ export class CharacterController {
         summary: 'Add an item to a character',
         description: 'Add an item to a character.',
     })
-    @ApiOkResponse({ type: CharacterResponseDto.Output })
+    @ApiOkResponse({ type: CharacterResponseDto })
     async addItemToCharacter(@Param() params: CharacterItemParamDto, @CurrentUser() user: AuthUser) {
         return this.characterService.addItemToCharacter(params.id, params.itemId, user.userId);
     }
@@ -95,7 +98,7 @@ export class CharacterController {
         description:
             'Remove an item snapshot from a character inventory. Use the snapshot _id (from character.items), not the catalog item id.',
     })
-    @ApiOkResponse({ type: CharacterResponseDto.Output })
+    @ApiOkResponse({ type: CharacterResponseDto })
     async removeItemFromCharacter(@Param() params: CharacterItemParamDto, @CurrentUser() user: AuthUser) {
         return this.characterService.removeItemFromCharacter(params.id, params.itemId, user.userId);
     }
@@ -105,7 +108,7 @@ export class CharacterController {
         summary: 'Add an spell to a character',
         description: 'Add an spell to a character.',
     })
-    @ApiOkResponse({ type: CharacterResponseDto.Output })
+    @ApiOkResponse({ type: CharacterResponseDto })
     async addSpellToCharacter(@Param() params: CharacterSpellParamDto, @CurrentUser() user: AuthUser) {
         return this.characterService.addSpellToCharacter(params.id, params.spellId, user.userId);
     }
@@ -116,7 +119,7 @@ export class CharacterController {
         description:
             'Remove an spell snapshot from a character inventory. Use the snapshot _id (from character.spells), not the catalog spell id.',
     })
-    @ApiOkResponse({ type: CharacterResponseDto.Output })
+    @ApiOkResponse({ type: CharacterResponseDto })
     async removeSpellFromCharacter(@Param() params: CharacterSpellParamDto, @CurrentUser() user: AuthUser) {
         return this.characterService.removeSpellFromCharacter(params.id, params.spellId, user.userId);
     }
